@@ -8,16 +8,18 @@ import (
 type payload struct {
 	Username string
 	Password string
+	Email    string
+	Birthday string
 }
 
-const subject = "auth.register"
+const subjectSub = "auth.register"
 
 func RegisterSubscriber(s *duey.EventStreamer, db *database.DB) func() (string, duey.Handler) {
 	return func() (string, duey.Handler) {
 		cb := func(_, reply string, p payload) {
-			Register(s, reply, db, p.Username, p.Password)
+			Register(s, reply, db, p)
 		}
 
-		return subject, cb
+		return subjectSub, cb
 	}
 }
