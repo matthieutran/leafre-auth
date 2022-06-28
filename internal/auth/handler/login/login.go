@@ -17,7 +17,7 @@ func Login(s *duey.EventStreamer, subject string, db *database.DB, username, pas
 	var hashed string // Password to compare with
 
 	// Fetch user
-	err := db.Conn().QueryRow(context.Background(), `SELECT "password" FROM "users" WHERE "username"='$1'`, &username).Scan(&hashed)
+	err := db.Conn().QueryRow(context.Background(), `SELECT "password" FROM "users" WHERE "username"=$1`, &username).Scan(&hashed)
 	if err != nil {
 		// No account registered
 		if errors.Is(err, pgx.ErrNoRows) {

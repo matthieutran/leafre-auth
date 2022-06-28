@@ -6,6 +6,7 @@ import (
 	"github.com/matthieutran/duey"
 	"github.com/matthieutran/leafre-auth/internal/auth/database"
 	"github.com/matthieutran/leafre-auth/internal/auth/handler/login"
+	"github.com/matthieutran/leafre-auth/internal/auth/handler/register"
 )
 
 func Init(uri string, db *database.DB) *duey.EventStreamer {
@@ -16,6 +17,7 @@ func Init(uri string, db *database.DB) *duey.EventStreamer {
 
 	subscribers := []func() (string, duey.Handler){
 		login.LoginSubscriber(s, db),
+		register.RegisterSubscriber(s, db),
 	}
 
 	for _, subscriber := range subscribers {

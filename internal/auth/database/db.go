@@ -13,12 +13,16 @@ type DB struct {
 }
 
 func Init() (db *DB, err error) {
+	db = &DB{}
+
 	log.Println("Connecting to DB")
 	dbURI := os.Getenv("POSTGRES_URI")
-	if db.conn, err = pgxpool.Connect(context.Background(), dbURI); err != nil {
+	conn, err := pgxpool.Connect(context.Background(), dbURI)
+	if err != nil {
 		return
 	}
 
+	db.conn = conn
 	sql := `
 	CREATE TABLE IF NOT EXISTS users(
 		id            SERIAL   PRIMARY KEY,
