@@ -1,9 +1,8 @@
 package login
 
 import (
-	"log"
-
 	"github.com/matthieutran/duey"
+	"github.com/matthieutran/leafre-auth/internal/auth/database"
 )
 
 type payload struct {
@@ -13,11 +12,10 @@ type payload struct {
 
 const subject = "auth.login"
 
-func LoginSubscriber(s *duey.EventStreamer) func() (string, duey.Handler) {
+func LoginSubscriber(s *duey.EventStreamer, db *database.DB) func() (string, duey.Handler) {
 	return func() (string, duey.Handler) {
 		cb := func(_, reply string, p payload) {
-			log.Println(reply, p)
-			doLogin(s, reply, p.Username, p.Password)
+			Login(s, reply, db, p.Username, p.Password)
 		}
 
 		return subject, cb

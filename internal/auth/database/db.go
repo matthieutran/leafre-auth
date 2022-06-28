@@ -12,7 +12,7 @@ type DB struct {
 	conn *pgxpool.Pool
 }
 
-func Init() (db DB, err error) {
+func Init() (db *DB, err error) {
 	log.Println("Connecting to DB")
 	dbURI := os.Getenv("POSTGRES_URI")
 	if db.conn, err = pgxpool.Connect(context.Background(), dbURI); err != nil {
@@ -34,6 +34,10 @@ func Init() (db DB, err error) {
 
 	log.Println("Successfully connected to DB")
 	return
+}
+
+func (d *DB) Conn() *pgxpool.Pool {
+	return d.conn
 }
 
 func (d *DB) Stop() {

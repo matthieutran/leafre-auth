@@ -15,13 +15,13 @@ func main() {
 	log.Println("Leafre - Authentication")
 
 	wg.Add(1)
-	_, err := database.Init()
+	db, err := database.Init()
 	if err != nil {
 		log.Fatal("Error connecting to DB:", err)
 	}
 
 	wg.Add(1)
-	s := messaging.Init(os.Getenv("NATS_URI"))
+	s := messaging.Init(os.Getenv("NATS_URI"), db)
 	defer s.Stop()
 
 	wg.Wait()
