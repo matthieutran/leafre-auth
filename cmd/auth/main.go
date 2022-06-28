@@ -2,8 +2,10 @@ package main
 
 import (
 	"log"
+	"os"
 	"sync"
 
+	"github.com/matthieutran/leafre-auth/internal/auth/database"
 	"github.com/matthieutran/leafre-auth/internal/auth/messaging"
 )
 
@@ -13,7 +15,14 @@ func main() {
 	log.Println("Leafre - Authentication")
 
 	wg.Add(1)
-	messaging.Init()
+	_, err := database.Init()
+	if err != nil {
+		log.Fatal("Error connecting to DB:", err)
+	}
+
+	wg.Add(1)
+	s := messaging.Init(os.Getenv("NATS_URI"))
+	defer s.Stop()
 
 	wg.Wait()
 }

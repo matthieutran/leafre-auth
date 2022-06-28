@@ -7,13 +7,11 @@ import (
 	"github.com/matthieutran/leafre-auth/internal/auth/handler/login"
 )
 
-func Init() {
-	s, err := duey.Init()
+func Init(uri string) *duey.EventStreamer {
+	s, err := duey.Init(uri)
 	if err != nil {
 		log.Fatal("Could not connect to messaging system:", err)
 	}
-
-	defer s.Stop()
 
 	subscribers := []func() (string, duey.Handler){
 		login.LoginSubscriber(s),
@@ -22,4 +20,6 @@ func Init() {
 	for _, subscriber := range subscribers {
 		s.Subscribe(subscriber())
 	}
+
+	return s
 }
