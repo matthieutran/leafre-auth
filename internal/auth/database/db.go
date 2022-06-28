@@ -25,13 +25,13 @@ func Init() (db *DB, err error) {
 	db.conn = conn
 	sql := `
 	CREATE TABLE IF NOT EXISTS users(
-		id            SERIAL      PRIMARY KEY,
-		username      VARCHAR(32) NOT NULL UNIQUE,
-		password      VARCHAR(32) NOT NULL,
-		email		  VARCHAR(32) NOT NULL UNIQUE,
-		birthday	  DATE        DEFAULT current_date,
-		created_at    TIMESTAMP   DEFAULT current_timestamp,
-		updated_at    TIMESTAMP   DEFAULT current_timestamp
+		id            SERIAL       PRIMARY KEY,
+		username      VARCHAR(32)  NOT NULL UNIQUE,
+		password      VARCHAR(255) NOT NULL,
+		email		  VARCHAR(32)  NOT NULL UNIQUE,
+		birthday	  DATE         DEFAULT current_date,
+		created_at    TIMESTAMP    DEFAULT current_timestamp,
+		updated_at    TIMESTAMP    DEFAULT current_timestamp
 	);
 	`
 	if _, err = db.conn.Exec(context.Background(), sql); err != nil {
