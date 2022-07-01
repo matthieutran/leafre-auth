@@ -2,20 +2,15 @@ package login
 
 import (
 	"github.com/matthieutran/duey"
-	"github.com/matthieutran/leafre-auth/internal/auth/database"
+	"github.com/matthieutran/leafre-auth/internal/auth/user"
 )
-
-type payload struct {
-	Username string
-	Password string
-}
 
 const subject = "auth.login"
 
-func LoginSubscriber(s *duey.EventStreamer, db *database.DB) func() (string, duey.Handler) {
+func LoginSubscriber(s *duey.EventStreamer, userRepository user.UserRepository) func() (string, duey.Handler) {
 	return func() (string, duey.Handler) {
-		cb := func(_, reply string, p payload) {
-			Login(s, reply, db, p.Username, p.Password)
+		cb := func(_, reply string, f user.UserForm) {
+			Login(s, reply, userRepository, f)
 		}
 
 		return subject, cb

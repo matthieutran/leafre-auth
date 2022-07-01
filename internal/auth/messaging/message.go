@@ -7,17 +7,20 @@ import (
 	"github.com/matthieutran/leafre-auth/internal/auth/database"
 	"github.com/matthieutran/leafre-auth/internal/auth/handler/login"
 	"github.com/matthieutran/leafre-auth/internal/auth/handler/register"
+	"github.com/matthieutran/leafre-auth/internal/auth/user"
 )
 
-func Init(uri string, db *database.DB) *duey.EventStreamer {
+func Init(db *database.DB, uri string) *duey.EventStreamer {
 	s, err := duey.Init(uri)
 	if err != nil {
 		log.Fatal("Could not connect to messaging system:", err)
 	}
 
+	userRepository := user.NewUserPostgresRepository()
+
 	subscribers := []func() (string, duey.Handler){
-		login.LoginSubscriber(s, db),
-		register.RegisterSubscriber(s, db),
+		login.LoginSubscriber(s, userRepository),
+		register.RegisterSubscriber(s, userRepository),
 	}
 
 	for _, subscriber := range subscribers {

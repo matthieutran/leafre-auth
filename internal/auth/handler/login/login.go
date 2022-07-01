@@ -1,50 +1,28 @@
 package login
 
 import (
-	"context"
 	"errors"
-	"log"
 
-	"github.com/jackc/pgx/v4"
 	"github.com/matthieutran/duey"
-	"github.com/matthieutran/leafre-auth/internal/auth/database"
 	"github.com/matthieutran/leafre-auth/internal/auth/operation"
-	"golang.org/x/crypto/bcrypt"
+	"github.com/matthieutran/leafre-auth/internal/auth/user"
 )
 
 // Login validates the given username and password combination
-func Login(s *duey.EventStreamer, subject string, db *database.DB, username, password string) {
-	var id int
-	var hashed string // Password to compare with
+func Login(s *duey.EventStreamer, subject string, userRepo user.UserRepository, form user.UserForm) {
+	var code operation.LoginRequestCode
+	code = operation.Success
 
-	// Fetch user
-	err := db.Conn().QueryRow(context.Background(), `SELECT "id", "password" FROM "users" WHERE "username"=$1`, &username).Scan(&id, &hashed)
+	id, err := userRepo.Login(form)
 	if err != nil {
-		// No account registered
-		if errors.Is(err, pgx.ErrNoRows) {
-			PublishLoginResponse(s, subject, loginResponse{Code: operation.NotRegistered})
-			return
+		if errors.Is(err, user.ErrNotRegistered) {
+			// User does not exist in the storage
+			code = operation.NotRegistered
+		} else {
+			// Some other weird DB error
+			code = operation.DBFail
 		}
-		// Unknown error
-		log.Println("Error validating login:", err)
-		PublishLoginResponse(s, subject, loginResponse{Code: operation.DBFail})
-		return
 	}
 
-	// User successfully fetched, compare passwords
-	err = bcrypt.CompareHashAndPassword([]byte(hashed), []byte(password))
-	if err != nil {
-		// Password incorrect
-		if errors.Is(err, bcrypt.ErrMismatchedHashAndPassword) {
-			PublishLoginResponse(s, subject, loginResponse{Code: operation.IncorrectPassword})
-			return
-		}
-		// DB password is corrupt? - ErrHashTooShort
-		log.Printf("Error comparing password from database for user %s... Password corrupt?: %s", username, err)
-		PublishLoginResponse(s, subject, loginResponse{Code: operation.DBFail})
-		return
-	}
-
-	// Publish the login result
-	PublishLoginResponse(s, subject, loginResponse{Code: operation.Success, Id: id})
+	PublishLoginResponse(s, subject, code, id)
 }

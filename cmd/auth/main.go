@@ -21,7 +21,7 @@ func main() {
 	}
 
 	wg.Add(1)
-	s := messaging.Init(os.Getenv("NATS_URI"), db)
+	s := messaging.Init(db, os.Getenv("NATS_URI"))
 	defer s.Stop()
 
 	wg.Wait()
