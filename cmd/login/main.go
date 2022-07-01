@@ -43,8 +43,8 @@ func main() {
 
 	res := &Result{}
 	regResult := &RegResult{}
-	err = s.Request("auth.login", &payload{Username: "matt2", Password: "matt12"}, res, 5*time.Second)
-	// err = s.Request("auth.register", &payload{Username: "matt", Password: "matt12", Email: "matthieuktran@gmail.com", Birthday: "1999-04-28"}, regResult, 5*time.Second)
+	err = s.Request("auth.login", &payload{Username: "matt", Password: "matt12"}, res, 5*time.Second)
+	// err = s.Request("auth.register", &payload{Username: "matt2", Password: "matt12", Email: "matthieuktran3@gmail.com", Birthday: "1999-04-28"}, regResult, 5*time.Second)
 	// "auth.register", &payload{Username: "matt", Password: "matt12", Email: "matthieuktran@gmail.com", Birthday: "1999-04-28"}, res, 5*time.Second)
 	if err != nil {
 		log.Fatalln(err)

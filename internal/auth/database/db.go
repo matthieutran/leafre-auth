@@ -29,7 +29,6 @@ func Init() (db *DB, err error) {
 		username      VARCHAR(32)  NOT NULL UNIQUE,
 		password      VARCHAR(255) NOT NULL,
 		email		  VARCHAR(32)  NOT NULL UNIQUE,
-		birthday	  DATE         DEFAULT current_date,
 		created_at    TIMESTAMP    DEFAULT current_timestamp,
 		updated_at    TIMESTAMP    DEFAULT current_timestamp
 	);
