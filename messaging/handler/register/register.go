@@ -5,7 +5,7 @@ import (
 
 	"github.com/matthieutran/duey"
 	auth "github.com/matthieutran/leafre-auth"
-	"github.com/matthieutran/leafre-auth/internal/auth/operation"
+	"github.com/matthieutran/leafre-auth/pkg/operation"
 )
 
 // Register attempts to create a new user

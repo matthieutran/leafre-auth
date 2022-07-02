@@ -7,7 +7,7 @@ import (
 	"time"
 
 	"github.com/matthieutran/duey"
-	"github.com/matthieutran/leafre-auth/internal/auth/operation"
+	"github.com/matthieutran/leafre-auth/pkg/operation"
 )
 
 type LoginPayload struct {

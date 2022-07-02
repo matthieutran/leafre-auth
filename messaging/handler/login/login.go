@@ -5,7 +5,7 @@ import (
 
 	"github.com/matthieutran/duey"
 	auth "github.com/matthieutran/leafre-auth"
-	"github.com/matthieutran/leafre-auth/internal/auth/operation"
+	"github.com/matthieutran/leafre-auth/pkg/operation"
 )
 
 // Login validates the given username and password combination

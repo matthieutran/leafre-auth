@@ -5,8 +5,8 @@ import (
 
 	"github.com/jackc/pgx/v4/pgxpool"
 	"github.com/matthieutran/duey"
-	"github.com/matthieutran/leafre-auth/internal/auth/handler/login"
-	"github.com/matthieutran/leafre-auth/internal/auth/handler/register"
+	"github.com/matthieutran/leafre-auth/messaging/handler/login"
+	"github.com/matthieutran/leafre-auth/messaging/handler/register"
 	"github.com/matthieutran/leafre-auth/postgres"
 	"github.com/matthieutran/leafre-auth/repository"
 )
