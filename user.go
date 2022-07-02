@@ -1,11 +1,8 @@
-package user
+package auth
 
 import (
 	"encoding/json"
 	"errors"
-	"log"
-
-	"golang.org/x/crypto/bcrypt"
 )
 
 type User struct {
@@ -46,26 +43,3 @@ var ErrWrongPassword = errors.New("incorrect password")
 
 var ErrEmailAlreadyRegistered = errors.New("user already registered")
 var ErrUserAlreadyRegistered = errors.New("email already registered")
-
-func hashPassword(password string) string {
-	p, _ := bcrypt.GenerateFromPassword([]byte(password), 8)
-
-	return string(p)
-}
-
-func comparePassword(password, hashed string) (err error) {
-	err = bcrypt.CompareHashAndPassword([]byte(hashed), []byte(password))
-	if err != nil {
-		if errors.Is(err, bcrypt.ErrMismatchedHashAndPassword) {
-			// Password incorrect
-			err = ErrWrongPassword
-			return
-		}
-
-		// DB password is corrupt? - ErrHashTooShort
-		log.Printf("Error comparing password from database... Stored hash corrupt (%s)?: %s", password, err)
-		err = ErrDBFail
-	}
-
-	return
-}
