@@ -28,10 +28,12 @@ func (r UserRepository) Login(form auth.UserForm) (id int, err error) {
 	return id, crypto.ComparePassword(form.Password, user.Password)
 }
 
-func (r UserRepository) Register(u auth.User) (user auth.User, err error) {
+func (r UserRepository) Register(u auth.User) (id int, err error) {
 	// Hash password before storing to DB
-	user.Password = crypto.HashPassword(u.Password)
+	u.Password = crypto.HashPassword(u.Password)
 
 	// Return added object (with ID) and error (where applicable)
-	return r.user.Add(user)
+	newUser, err := r.user.Add(u)
+
+	return newUser.Id, err
 }

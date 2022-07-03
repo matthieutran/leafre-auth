@@ -6,7 +6,7 @@ import (
 )
 
 type User struct {
-	Id        int    `json:"id"`
+	Id        int    `json:"auth_id"`
 	Username  string `json:"username"`
 	Password  string `json:"password,omitempty"`
 	Email     string `json:"email"`
@@ -25,6 +25,7 @@ func (u User) MarshalJSON() ([]byte, error) {
 type UserForm struct {
 	Username string `json:"username"`
 	Password string `json:"password"`
+	Email    string `json:"email"`
 }
 
 type Users []User
@@ -32,8 +33,8 @@ type Users []User
 type UserRepository interface {
 	// Login validates the login details in the `UserForm` object and returns the user's id and error (where applicable).
 	Login(UserForm) (id int, err error)
-	// Register attempts to creates and store a new `User`. Returns the `User` object back with error (where applicable).
-	Register(User) (User, error)
+	// Register attempts to creates and store a new `User` and returns the user's id and error (where applicable).
+	Register(User) (id int, err error)
 }
 
 var ErrDBFail = errors.New("DB fail")

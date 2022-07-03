@@ -9,7 +9,7 @@ const subjectSub = "auth.register"
 
 func RegisterSubscriber(s *duey.EventStreamer, userRepository auth.UserRepository) func() (string, duey.Handler) {
 	return func() (string, duey.Handler) {
-		cb := func(_, reply string, p auth.User) {
+		cb := func(_, reply string, p auth.UserForm) {
 			Register(s, reply, userRepository, p)
 		}
 

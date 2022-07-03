@@ -9,11 +9,17 @@ import (
 )
 
 // Register attempts to create a new user
-func Register(s *duey.EventStreamer, subject string, userRepository auth.UserRepository, u auth.User) {
+func Register(s *duey.EventStreamer, subject string, userRepository auth.UserRepository, form auth.UserForm) {
 	var code operation.RegisterStatusCode
 	code = operation.RegisterSuccess
 
-	newUser, err := userRepository.Register(u)
+	user := auth.User{
+		Username: form.Username,
+		Password: form.Password,
+		Email:    form.Email,
+	}
+
+	id, err := userRepository.Register(user)
 	if err != nil {
 		if errors.Is(err, auth.ErrUserAlreadyRegistered) {
 			// Username is taken
@@ -25,8 +31,7 @@ func Register(s *duey.EventStreamer, subject string, userRepository auth.UserRep
 			// Some other weird DB error
 			code = operation.RegisterServerError
 		}
-		return
 	}
 
-	PublishRegisterResponse(s, subject, code, newUser)
+	PublishRegisterResponse(s, subject, code, id)
 }

@@ -2,19 +2,18 @@ package register
 
 import (
 	"github.com/matthieutran/duey"
-	auth "github.com/matthieutran/leafre-auth"
 	"github.com/matthieutran/leafre-auth/pkg/operation"
 )
 
 type response struct {
 	Code operation.RegisterStatusCode `json:"code"`
-	auth.User
+	Id   int                          `json:"auth_id"`
 }
 
-func PublishRegisterResponse(s *duey.EventStreamer, subject string, code operation.RegisterStatusCode, u auth.User) {
+func PublishRegisterResponse(s *duey.EventStreamer, subject string, code operation.RegisterStatusCode, id int) {
 	res := &response{
 		Code: code,
-		User: u,
+		Id:   id,
 	}
 
 	s.Publish(subject, res)
